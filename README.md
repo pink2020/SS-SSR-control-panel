@@ -1,6 +1,6 @@
-示例站点：https://v2no.us （支持流量计费、按时间计费、支付宝付款）
+（支持流量计费、按时间计费、支付宝付款）
 
-马上过期了，凑活看看吧，除去lnmp的安装时间，仅需3分钟即可完成。
+除去lnmp的安装时间，仅需3分钟即可完成。
 # [ss-panel 一键脚本](https://91vps.us/2017/05/26/ss-panel/)
 ```
 wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/ss-panel_node.sh && chmod +x ss-panel_node.sh && bash ss-panel_node.sh
