@@ -21,4 +21,4 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel
 
 默认密码：91vps
 
-详情请[点击查看](https://91vps.us/category/shadowsocks/ss-build/)，还有一个shadowsocks-manager一键安装脚本，自己看吧。
+详情请[点击查看](https://91vps.win/category/shadowsocks/ss-build/)，还有一个shadowsocks-manager一键安装脚本，自己看吧。
