@@ -97,7 +97,6 @@ install_node(){
 	echo "# One click Install Shadowsocks-Python-Manyuser             #"
 	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
 	echo "# Author: 91vps                                             #"
-	echo "# https://91vps.win/2017/08/24/ss-panel-v3-mod/             #"
 	echo "#############################################################"
 	echo
 	#Check Root
@@ -164,7 +163,6 @@ install_node(){
 	echo "# 安装完成，节点即将重启使配置生效                               #"
 	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
 	echo "# Author: 91vps                                             #"
-	echo "# Blog: https://91vps.win/2017/08/24/ss-panel-v3-mod/       #"
 	echo "#############################################################"
 	reboot now
 }
@@ -196,7 +194,6 @@ install_panel_and_node(){
 	echo "# 安装完成，登录http://${IPAddress}看看吧~                     #"
 	echo "# 安装完成，节点即将重启使配置生效                               #"
 	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
-	echo "# Blog: https://91vps.win/2017/08/24/ss-panel-v3-mod/       #"
 	echo "#############################################################"
 	reboot now
 }
@@ -205,7 +202,6 @@ echo "#############################################################"
 echo "# One click Install SS-panel and Shadowsocks-Py-Mu          #"
 echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
 echo "# Author: 91vps                                             #"
-echo "# Blog: https://91vps.win/2017/08/24/ss-panel-v3-mod/       #"
 echo "# Please choose the server you want                         #"
 echo "# 1  SS-V3_mod_panel and node One click Install             #"
 echo "# 2  SS-node One click Install                              #"
