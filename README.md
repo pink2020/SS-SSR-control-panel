@@ -13,10 +13,11 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel
 选项都差不多,直接输入1安装即可
 
 默认账号：91vps
+
 默认密码：91vps
 
 
-[TG讨论组](https://t.me/feiyangss)
+联系方式：[TG讨论组](https://t.me/feiyangss)
 
 作者码农，可以接定制页面、脚本、游戏加速器的活儿，活儿保证让你满意~
 ![](http://cdn.mmmxcc.cn/59ae59a7e12bf.jpg)
