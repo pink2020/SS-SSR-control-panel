@@ -19,7 +19,8 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel
 
 默认密码：91vps
 
-# 关于作者
+# 关于
 码农一只，欢迎打赏。
+
 接定制功能、页面、脚本、游戏加速器，活儿保证让你满意~
 ![](http://cdn.mmmxcc.cn/59ae59a7e12bf.jpg)
