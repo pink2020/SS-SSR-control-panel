@@ -5,11 +5,11 @@
 [TG讨论组](https://t.me/feiyangss)
 
 # 代码部分
-# ss-panel v3一键脚本
+### ss-panel v3一键脚本
 ```
 wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/ss-panel_node.sh && chmod +x ss-panel_node.sh && bash ss-panel_node.sh
 ```
-# ss-panel mod魔改版一键脚本
+### ss-panel mod魔改版一键脚本
 ```
 wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/ss-panel-v3-mod.sh && chmod +x ss-panel-v3-mod.sh && bash ss-panel-v3-mod.sh
 ```
@@ -20,6 +20,6 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel
 默认密码：91vps
 
 # 关于作者
-码农一只
-接定制页面、脚本、游戏加速器，活儿保证让你满意~
+码农一只，欢迎打赏。
+接定制功能、页面、脚本、游戏加速器，活儿保证让你满意~
 ![](http://cdn.mmmxcc.cn/59ae59a7e12bf.jpg)
