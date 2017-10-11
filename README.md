@@ -1,12 +1,15 @@
 （支持流量计费、按时间计费、支付宝付款）
 
 除去lnmp的安装时间，仅需3分钟即可完成。
-# [ss-panel 一键脚本](https://91vps.us/2017/05/26/ss-panel/)
+# 联系方式
+[TG讨论组](https://t.me/feiyangss)
+
+# 代码部分
+# ss-panel v3一键脚本
 ```
 wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/ss-panel_node.sh && chmod +x ss-panel_node.sh && bash ss-panel_node.sh
 ```
-# [ss-panel v3 mod魔改版一键脚本](https://91vps.us/2017/05/27/ss-panel-v3-mod/)
-
+# ss-panel mod魔改版一键脚本
 ```
 wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/ss-panel-v3-mod.sh && chmod +x ss-panel-v3-mod.sh && bash ss-panel-v3-mod.sh
 ```
@@ -16,8 +19,7 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel
 
 默认密码：91vps
 
-
-联系方式：[TG讨论组](https://t.me/feiyangss)
-
-作者码农，可以接定制页面、脚本、游戏加速器的活儿，活儿保证让你满意~
+# 关于作者
+码农一只
+接定制页面、脚本、游戏加速器，活儿保证让你满意~
 ![](http://cdn.mmmxcc.cn/59ae59a7e12bf.jpg)
