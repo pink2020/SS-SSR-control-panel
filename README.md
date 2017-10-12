@@ -5,6 +5,9 @@
 [TG讨论组](https://t.me/feiyangss)
 
 # 代码部分
+
+##### 要求centos 7 x64
+
 ### ss-panel v3一键脚本
 ```
 wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/ss-panel_node.sh && chmod +x ss-panel_node.sh && bash ss-panel_node.sh
