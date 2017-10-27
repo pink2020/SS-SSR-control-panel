@@ -146,13 +146,13 @@ install_node(){
 	sed -i "2a\NODE_ID = ${UserNODE_ID}" /root/shadowsocks/userapiconfig.py
 	# 启用supervisord
 	echo_supervisord_conf > /etc/supervisord.conf
-    sed -i '$a [program:ssr]\ncommand = python /root/shadowsocks/server.py\nuser = root\nautostart = true\nautorestart = true' /etc/supervisord.conf
+    	sed -i '$a [program:ssr]\ncommand = python /root/shadowsocks/server.py\nuser = root\nautostart = true\nautorestart = true' /etc/supervisord.conf
 	supervisord
 	#iptables
 	iptables -F
 	iptables -X  
-	iptables -I INPUT -p tcp -m tcp --dport 80:65535 -j ACCEPT
-	iptables -I INPUT -p udp -m udp --dport 80:65535 -j ACCEPT
+	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
+	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
 	iptables-save >/etc/sysconfig/iptables
 	iptables-save >/etc/sysconfig/iptables
 	echo 'iptables-restore /etc/sysconfig/iptables' >> /etc/rc.local
