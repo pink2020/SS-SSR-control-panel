@@ -151,10 +151,9 @@ install_node(){
 	#iptables
 	iptables -F
 	iptables -X  
-	iptables -I INPUT -p tcp -m tcp --dport 104 -j ACCEPT
-	iptables -I INPUT -p udp -m udp --dport 104 -j ACCEPT
-	iptables -I INPUT -p tcp -m tcp --dport 1024: -j ACCEPT
-	iptables -I INPUT -p udp -m udp --dport 1024: -j ACCEPT
+	iptables -I INPUT -p tcp -m tcp --dport 80:65535 -j ACCEPT
+	iptables -I INPUT -p udp -m udp --dport 80:65535 -j ACCEPT
+	iptables-save >/etc/sysconfig/iptables
 	iptables-save >/etc/sysconfig/iptables
 	echo 'iptables-restore /etc/sysconfig/iptables' >> /etc/rc.local
 	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
@@ -182,10 +181,9 @@ install_panel_and_node(){
 	yum install iptables -y
 	iptables -F
 	iptables -X  
-	iptables -I INPUT -p tcp -m tcp --dport 104 -j ACCEPT
-	iptables -I INPUT -p udp -m udp --dport 104 -j ACCEPT
-	iptables -I INPUT -p tcp -m tcp --dport 1024: -j ACCEPT
-	iptables -I INPUT -p udp -m udp --dport 1024: -j ACCEPT
+	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
+	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
+	iptables-save >/etc/sysconfig/iptables
 	iptables-save >/etc/sysconfig/iptables
 	echo 'iptables-restore /etc/sysconfig/iptables' >> /etc/rc.local
 	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
