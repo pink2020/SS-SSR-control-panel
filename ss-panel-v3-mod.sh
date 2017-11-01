@@ -38,7 +38,8 @@ install_ss_panel_mod_v3(){
 install_centos_ssr(){
 	yum -y update
 	yum -y install git 
-	yum -y install python-setuptools && easy_install pip 
+	yum -y install python-setuptools python-pip
+	pip install --upgrade pip
 	yum -y groupinstall "Development Tools" 
 	#512M的小鸡增加1G的Swap分区
 	dd if=/dev/zero of=/var/swap bs=1024 count=1048576
@@ -51,8 +52,7 @@ install_centos_ssr(){
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
-	yum -y install python-setuptools
-	easy_install supervisor
+	pip install supervisor
 	#clone shadowsocks
 	cd /root
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
