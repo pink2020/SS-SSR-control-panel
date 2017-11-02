@@ -43,12 +43,6 @@ install_centos_ssr(){
 	python get-pip.py
 	rm -rf python get-pip.py
 	yum -y groupinstall "Development Tools" 
-	#512M的小鸡增加1G的Swap分区
-	dd if=/dev/zero of=/var/swap bs=1024 count=1048576
-	mkswap /var/swap
-	chmod 0644 /var/swap
-	swapon /var/swap
-	echo '/var/swap   swap   swap   default 0 0' >> /etc/fstab
 	wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
 	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 	./configure && make -j2 && make install
