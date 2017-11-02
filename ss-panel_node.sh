@@ -88,8 +88,10 @@ install_ss_py_mu(){
 		if [[ ${release} = "centos" ]]; then
 			echo "Will install below software on your centos system:"
 			yum install git lsof -y
-			yum -y install python-setuptools python-pip
-			pip install --upgrade pip
+			yum -y install python-setuptools  
+			curl https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/get-pip.py -o get-pip.py
+			python get-pip.py
+			rm -rf python get-pip.py
 			yum -y groupinstall "Development Tools"
 			wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
 			tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
