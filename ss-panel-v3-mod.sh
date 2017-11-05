@@ -23,7 +23,7 @@ install_ss_panel_mod_v3(){
 	mysql -uroot -proot -e"use sspanel;" 
 	mysql -uroot -proot sspanel < /home/wwwroot/default/sql/sspanel.sql
 	cd /home/wwwroot/default
-	php composer.phar install
+	php xcat initQQWry
 	php -n xcat initdownload
 	yum -y install vixie-cron crontabs
 	rm -rf /var/spool/cron/root
