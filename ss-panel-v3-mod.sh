@@ -185,8 +185,9 @@ install_panel_and_node(){
 	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
 	chmod +x /etc/rc.d/rc.local
 	echo "#############################################################"
-	echo "# 安装完成，登录http://${IPAddress}看看吧~                     #"
-	echo "# 安装完成，节点即将重启使配置生效                               #"
+	echo "# 安装完成，登录http://${IPAddress}看看吧~                    #"
+	echo "# 用户名: 91vps 密码: 91vps                                  #"
+	echo "# 安装完成，节点即将重启使配置生效                             #"
 	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
 	echo "#############################################################"
 	reboot now
