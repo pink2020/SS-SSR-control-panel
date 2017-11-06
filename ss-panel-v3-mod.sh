@@ -25,6 +25,7 @@ install_ss_panel_mod_v3(){
 	cd /home/wwwroot/default
 	php xcat initQQWry
 	php -n xcat initdownload
+	php xcat initQQWry
 	yum -y install vixie-cron crontabs
 	rm -rf /var/spool/cron/root
 	echo 'SHELL=/bin/bash' >> /var/spool/cron/root
