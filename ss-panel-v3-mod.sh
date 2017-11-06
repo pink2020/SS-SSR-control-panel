@@ -37,7 +37,7 @@ install_ss_panel_mod_v3(){
 }
 install_centos_ssr(){
 	yum -y update
-	yum -y install git 
+	yum -y install git gcc
 	yum -y install python-setuptools 
 	curl https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/get-pip.py -o get-pip.py
 	python get-pip.py
