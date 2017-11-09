@@ -36,6 +36,20 @@ install_ss_panel_mod_v3(){
 	echo '*/1 * * * * php /home/wwwroot/default/xcat checkjob' >> /var/spool/cron/root
 	/sbin/service crond restart
 }
+#自动选择下载节点
+GIT='raw.githubusercontent.com'
+LIB='download.libsodium.org'
+GIT_PING=`ping -c 1 -w 1 $GIT|grep time=|awk '{print $7}'|sed "s/time=//"`
+LIB_PING=`ping -c 1 -w 1 $LIB|grep time=|awk '{print $7}'|sed "s/time=//"`
+echo "$GIT_PING $GIT" > ping.pl
+echo "$LIB_PING $LIB" >> ping.pl
+libAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
+if [ "$libAddr" == "$GIT" ];then
+	libAddr='https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/libsodium-1.0.13.tar.gz'
+else
+	libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz'
+fi
+rm -f ping.pl	
 install_centos_ssr(){
 	yum -y update
 	yum -y install git gcc
@@ -44,7 +58,7 @@ install_centos_ssr(){
 	python get-pip.py
 	rm -rf python get-pip.py
 	yum -y groupinstall "Development Tools" 
-	wget --no-check-certificate https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
+	wget --no-check-certificate $libAddr
 	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
@@ -71,7 +85,7 @@ install_ubuntu_ssr(){
 	apt-get install supervisor lsof -y
 	apt-get install build-essential wget -y
 	apt-get install iptables git -y
-	wget --no-check-certificate https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
+	wget --no-check-certificate $libAddr
 	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
@@ -187,10 +201,10 @@ install_panel_and_node(){
 	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
 	chmod +x /etc/rc.d/rc.local
 	echo "#############################################################"
-	echo "# 安装完成，登录http://${IPAddress}看看吧~                    #"
+	echo "# 安装完成，登录http://${IPAddress}看看吧~                   #"
 	echo "# 用户名: 91vps 密码: 91vps                                  #"
-	echo "# 安装完成，节点即将重启使配置生效                             #"
-	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
+	echo "# 安装完成，节点即将重启使配置生效                           #"
+	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu    #"
 	echo "#############################################################"
 	reboot now
 }
