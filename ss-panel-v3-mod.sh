@@ -63,9 +63,14 @@ install_centos_ssr(){
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
-	pip install supervisor
+	mkdir python && cd python
+	wget --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/python.zip
+	unzip python.zip
+	pip install *.whl
+	pip install *.tar.gz
 	#clone shadowsocks
 	cd /root
+	rm -rf python
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
 	#install devel
 	cd /root/shadowsocks
@@ -76,7 +81,6 @@ install_centos_ssr(){
 	yum -y install iptables
 	systemctl stop firewalld.service
 	systemctl disable firewalld.service
-	pip install -r requirements.txt
 	cp apiconfig.py userapiconfig.py
 	cp config.json user-config.json
 }
