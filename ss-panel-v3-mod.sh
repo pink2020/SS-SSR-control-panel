@@ -4,8 +4,10 @@
 install_ss_panel_mod_v3(){
 	yum -y remove httpd
 	yum install -y unzip zip git
-	wget -c --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/lnmp.zip && unzip lnmp.zip && rm -rf lnmp.zip && cd lnmp1.3 && chmod +x install.sh && ./install.sh lnmp
-	cd /home/wwwroot/default/
+	wget -c --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/lnmp1.4.zip && unzip lnmp1.4.zip && rm -rf lnmp1.4.zip && cd lnmp1.4 && chmod +x install.sh && ./install.sh lnmp
+	cd /home/wwwroot/
+	cp -r default/phpmyadmin/ .
+	cd default
 	rm -rf index.html
 	git clone https://github.com/mmmwhy/mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	cp config/.config.php.example config/.config.php
@@ -50,6 +52,7 @@ else
 fi
 rm -f ping.pl	
 install_centos_ssr(){
+	cd /root
 	yum -y update
 	yum -y install git gcc
 	yum -y install python-setuptools 
@@ -221,15 +224,21 @@ echo "# 1  SS-V3_mod_panel and node One click Install             #"
 echo "# 2  SS-node One click Install                              #"
 echo "#############################################################"
 echo
-stty erase '^H' && read -p " 请输入数字 [1-2]:" num
-case "$num" in
-	1)
-	install_panel_and_node
-	;;
-	2)
-	install_node
-	;;
-	*)
-	echo "请输入正确数字 [1-2]"
-	;;
-esac
+num=$1
+if [ "${num}" == "1" ]; then
+    install_ss_panel_mod_v3
+else
+    stty erase '^H' && read -p " 请输入数字 [1-2]:" num
+		case "$num" in
+		1)
+		install_panel_and_node
+		;;
+		2)
+		install_node
+		;;
+		*)
+		echo "请输入正确数字 [1-2]"
+		;;
+	esac
+fi
+
