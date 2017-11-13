@@ -4,7 +4,10 @@
 install_ss_panel_mod_v3(){
 	yum -y remove httpd
 	yum install -y unzip zip git
-	wget -c --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/lnmp1.4.zip && unzip lnmp1.4.zip && rm -rf lnmp1.4.zip && cd lnmp1.4 && chmod +x install.sh && ./install.sh lnmp
+	num=$1
+	if [ "${num}" != "1" ]; then
+  	  wget -c --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/lnmp1.4.zip && unzip lnmp1.4.zip && rm -rf lnmp1.4.zip && cd lnmp1.4 && chmod +x install.sh && ./install.sh lnmp
+	fi
 	cd /home/wwwroot/
 	cp -r default/phpmyadmin/ .
 	cd default
@@ -184,7 +187,7 @@ install_node(){
 	reboot now
 }
 install_panel_and_node(){
-	install_ss_panel_mod_v3
+	install_ss_panel_mod_v3 $1
 	# 取消文件数量限制
 	sed -i '$a * hard nofile 512000\n* soft nofile 512000' /etc/security/limits.conf
 	install_centos_ssr
@@ -227,7 +230,7 @@ echo "#############################################################"
 echo
 num=$1
 if [ "${num}" == "1" ]; then
-    install_ss_panel_mod_v3
+    install_panel_and_node 1
 else
     stty erase '^H' && read -p " 请输入数字 [1-2]:" num
 		case "$num" in
