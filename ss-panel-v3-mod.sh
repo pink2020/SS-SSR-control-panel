@@ -56,7 +56,7 @@ fi
 rm -f ping.pl	
 install_centos_ssr(){
 	cd /root
-	yum -y update
+	yum --exclude=kernel* update  
 	yum -y install git gcc
 	yum -y install python-setuptools 
 	curl https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/get-pip.py -o get-pip.py
