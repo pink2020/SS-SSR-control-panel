@@ -40,45 +40,89 @@ install_ss_panel_mod_v3(){
 	echo '*/1 * * * * php /home/wwwroot/default/xcat checkjob' >> /var/spool/cron/root
 	/sbin/service crond restart
 }
-#自动选择下载节点
-GIT='raw.githubusercontent.com'
-LIB='download.libsodium.org'
-GIT_PING=`ping -c 1 -w 1 $GIT|grep time=|awk '{print $7}'|sed "s/time=//"`
-LIB_PING=`ping -c 1 -w 1 $LIB|grep time=|awk '{print $7}'|sed "s/time=//"`
-echo "$GIT_PING $GIT" > ping.pl
-echo "$LIB_PING $LIB" >> ping.pl
-libAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
-if [ "$libAddr" == "$GIT" ];then
-	libAddr='https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/libsodium-1.0.13.tar.gz'
-else
-	libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz'
-fi
-rm -f ping.pl	
+Libtest(){
+	#自动选择下载节点
+	GIT='raw.githubusercontent.com'
+	LIB='download.libsodium.org'
+	GIT_PING=`ping -c 1 -w 1 $GIT|grep time=|awk '{print $7}'|sed "s/time=//"`
+	LIB_PING=`ping -c 1 -w 1 $LIB|grep time=|awk '{print $7}'|sed "s/time=//"`
+	echo "$GIT_PING $GIT" > ping.pl
+	echo "$LIB_PING $LIB" >> ping.pl
+	libAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
+	if [ "$libAddr" == "$GIT" ];then
+		libAddr='https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/libsodium-1.0.13.tar.gz'
+	else
+		libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz'
+	fi
+	rm -f ping.pl		
+}
+Get_Dist_Version()
+{
+    if [ -s /usr/bin/python3 ]; then
+        Version=`/usr/bin/python3 -c 'import platform; print(platform.linux_distribution()[1][0])'`
+    elif [ -s /usr/bin/python2 ]; then
+        Version=`/usr/bin/python2 -c 'import platform; print platform.linux_distribution()[1][0]'`
+    fi
+}
+python_test(){
+	#自动选择下载节点
+	tsinghua='pypi.tuna.tsinghua.edu.cn'
+	pypi='mirror-ord.pypi.io/simple'
+	doubanio='pypi.doubanio.com'
+	pubyun='pypi.pubyun.com'	
+	tsinghua_PING=`ping -c 1 -w 1 $tsinghua|grep time=|awk '{print $7}'|sed "s/time=//"`
+	pypi_PING=`ping -c 1 -w 1 $pypi|grep time=|awk '{print $7}'|sed "s/time=//"`
+	doubanio_PING=`ping -c 1 -w 1 $doubanio|grep time=|awk '{print $7}'|sed "s/time=//"`
+	pubyun_PING=`ping -c 1 -w 1 $pubyun|grep time=|awk '{print $7}'|sed "s/time=//"`
+	echo "$tsinghua_PING $tsinghua" > ping.pl
+	echo "$pypi_PING $pypi" >> ping.pl
+	echo "$doubanio_PING $doubanio" > ping.pl
+	echo "$pubyun_PING $pubyun" >> ping.pl
+	pyAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
+	if [ "$pyAddr" == "$tsinghua" ];then
+		pyAddr='https://pypi.tuna.tsinghua.edu.cn/simple'
+	elif [ "$pyAddr" == "$pypi" ];then
+		pyAddr='https://mirror-ord.pypi.io/simple'
+	elif [ "$pyAddr" == "$doubanio" ];then
+		pyAddr='http://pypi.doubanio.com/simple'
+	elif [ "$pyAddr" == "$pubyun_PING" ];then
+		pyAddr='http://pypi.pubyun.com/simple'
+	fi
+	rm -f ping.pl
+}
 install_centos_ssr(){
 	cd /root
 	yum --exclude=kernel* update  
 	yum -y install git gcc
 	yum -y install python-setuptools 
-	curl https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/get-pip.py -o get-pip.py
-	python get-pip.py
-	rm -rf python get-pip.py
 	yum -y groupinstall "Development Tools" 
+	Libtest
 	wget --no-check-certificate $libAddr
 	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
-	mkdir python && cd python
-	wget --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/python.zip
-	unzip python.zip
-	pip install *.whl
-	pip install *.tar.gz
-	#clone shadowsocks
-	cd /root
-	rm -rf python
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
-	#install devel
 	cd /root/shadowsocks
+	Get_Dist_Version
+	#centos7主动编译，centos6还是用自己的源。
+	if ["Version"==7];then
+		curl https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/get-pip.py -o get-pip.py
+		python get-pip.py
+		rm -rf python get-pip.py
+		mkdir python && cd python
+		wget --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/python.zip
+		unzip python.zip
+		pip install *.whl
+		pip install *.tar.gz
+		#clone shadowsocks
+		cd /root
+		rm -rf python
+	else
+		python_test
+		easy_install -i $pyAddr pip supervisor
+		pip install -r requirements.txt -i $pyAddr
+	fi
 	yum -y install lsof lrzsz
 	yum -y install python-devel
 	yum -y install libffi-devel
