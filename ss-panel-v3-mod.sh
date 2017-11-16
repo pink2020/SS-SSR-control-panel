@@ -65,7 +65,7 @@ Get_Dist_Version()
     fi
 }
 python_test(){
-	#自动选择下载节点
+	#测速决定使用哪个源
 	tsinghua='pypi.tuna.tsinghua.edu.cn'
 	pypi='mirror-ord.pypi.io/simple'
 	doubanio='pypi.doubanio.com'
