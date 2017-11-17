@@ -92,9 +92,17 @@ python_test(){
 }
 install_centos_ssr(){
 	cd /root
-	yum --exclude=kernel* update  
-	yum -y install git gcc
-	yum -y install python-setuptools 
+	Get_Dist_Version
+	if ["Version"==7];then
+		wget http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm   
+		rpm -ivh epel-release-7-10.noarch.rpm	
+	else
+		wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+		rpm -ivh epel-release-6-8.noarch.rpm
+	fi
+	rm -rf *.rpm
+	yum -y update --exclude=kernel*
+	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables supervisor python-pip
 	yum -y groupinstall "Development Tools" 
 	Libtest
 	wget --no-check-certificate $libAddr
@@ -104,30 +112,11 @@ install_centos_ssr(){
 	ldconfig
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
 	cd /root/shadowsocks
-	Get_Dist_Version
-	#centos7主动编译，centos6还是用自己的源。
-	if ["Version"==7];then
-		curl https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/get-pip.py -o get-pip.py
-		python get-pip.py
-		rm -rf python get-pip.py
-		mkdir python && cd python
-		wget --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/python.zip
-		unzip python.zip
-		pip install *.whl
-		pip install *.tar.gz
-		#clone shadowsocks
-		cd /root
-		rm -rf python
-	else
-		python_test
-		easy_install -i $pyAddr pip supervisor
-		pip install -r requirements.txt -i $pyAddr
-	fi
-	yum -y install lsof lrzsz
-	yum -y install python-devel
-	yum -y install libffi-devel
-	yum -y install openssl-devel
-	yum -y install iptables
+	pip install supervisor #再安装一次好了。。。。我也是无奈了。。。
+	chkconfig supervisord on
+	python_test
+	pip install -r requirements.txt #再装一遍
+	pip install -r requirements.txt -i $pyAddr
 	systemctl stop firewalld.service
 	systemctl disable firewalld.service
 	cp apiconfig.py userapiconfig.py
@@ -181,8 +170,7 @@ install_node(){
 			release="ubuntu"
 		elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
 			release="centos"
-	    fi
-		bit=`uname -m`
+	  fi
 	}
 	install_ssr_for_each(){
 		check_sys
