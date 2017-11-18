@@ -101,7 +101,7 @@ source_test()
 install_centos_ssr(){
 	cd /root
 	Get_Dist_Version
-	if ["$Version" == 7]; then
+	if [ $Version == "7" ]; then
 		wget http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm   
 		rpm -ivh epel-release-7-10.noarch.rpm	
 	else
@@ -110,9 +110,10 @@ install_centos_ssr(){
 	fi
 	rm -rf *.rpm
 	yum -y update --exclude=kernel*	
+	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables
 	yum -y groupinstall "Development Tools" 
 	#第一次yum安装 supervisor pip
-	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables supervisor python-pip
+	yum -y install supervisor python-pip
 	#第二次pip supervisor是否安装成功
 	if [ -z "`pip`" ]; then
     curl -O https://bootstrap.pypa.io/get-pip.py
@@ -167,6 +168,7 @@ install_centos_ssr(){
 		python setup.py install && cd ..
 		git clone https://github.com/etingof/pyasn1.git && cd pyasn1
 		python setup.py install && cd ..
+		rm -rf python
 	fi	
 	systemctl stop firewalld.service
 	systemctl disable firewalld.service
