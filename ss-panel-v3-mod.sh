@@ -104,6 +104,10 @@ install_centos_ssr(){
 	yum -y update --exclude=kernel*
 	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables supervisor python-pip
 	yum -y groupinstall "Development Tools" 
+	# 再装一次pip
+	curl -O https://bootstrap.pypa.io/get-pip.py
+	python get-pip.py 
+	rm -rf *.py
 	pip install --upgrade pip
 	Libtest
 	wget --no-check-certificate $libAddr
