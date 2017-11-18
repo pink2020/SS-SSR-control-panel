@@ -149,7 +149,7 @@ install_centos_ssr(){
 	#第二次检测是否安装成功
 	source_test
 	if [ -z "$answer" ]; then
-		pip install -r requirements.txt #再装一遍
+		pip install -r requirements.txt #用自带的源试试再装一遍
 	fi
 	#第三次检测是否成功
 	source_test
