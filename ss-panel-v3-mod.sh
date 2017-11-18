@@ -104,6 +104,7 @@ install_centos_ssr(){
 	yum -y update --exclude=kernel*
 	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables supervisor python-pip
 	yum -y groupinstall "Development Tools" 
+	pip install --upgrade pip
 	Libtest
 	wget --no-check-certificate $libAddr
 	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
