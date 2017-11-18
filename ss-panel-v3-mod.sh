@@ -67,7 +67,7 @@ Get_Dist_Version()
 python_test(){
 	#测速决定使用哪个源
 	tsinghua='pypi.tuna.tsinghua.edu.cn'
-	pypi='mirror-ord.pypi.io/simple'
+	pypi='mirror-ord.pypi.io'
 	doubanio='pypi.doubanio.com'
 	pubyun='pypi.pubyun.com'	
 	tsinghua_PING=`ping -c 1 -w 1 $tsinghua|grep time=|awk '{print $7}'|sed "s/time=//"`
@@ -79,21 +79,29 @@ python_test(){
 	echo "$doubanio_PING $doubanio" > ping.pl
 	echo "$pubyun_PING $pubyun" >> ping.pl
 	pyAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
-	if [ "$pyAddr" == "$tsinghua" ];then
+	if [ "$pyAddr" == "$tsinghua" ]; then
 		pyAddr='https://pypi.tuna.tsinghua.edu.cn/simple'
-	elif [ "$pyAddr" == "$pypi" ];then
+	elif [ "$pyAddr" == "$pypi" ]; then
 		pyAddr='https://mirror-ord.pypi.io/simple'
-	elif [ "$pyAddr" == "$doubanio" ];then
+	elif [ "$pyAddr" == "$doubanio" ]; then
 		pyAddr='http://pypi.doubanio.com/simple'
-	elif [ "$pyAddr" == "$pubyun_PING" ];then
+	elif [ "$pyAddr" == "$pubyun_PING" ]; then
 		pyAddr='http://pypi.pubyun.com/simple'
 	fi
 	rm -f ping.pl
 }
+source_test()
+{
+    if [ -s /usr/bin/python3 ]; then
+        answer=`/usr/bin/python3 -c 'import requests;print(requests)'`
+    elif [ -s /usr/bin/python2 ]; then
+        answer=`/usr/bin/python2 -c 'import requests;print(requests)'`
+    fi
+}
 install_centos_ssr(){
 	cd /root
 	Get_Dist_Version
-	if ["Version"==7];then
+	if ["$Version" == 7]; then
 		wget http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm   
 		rpm -ivh epel-release-7-10.noarch.rpm	
 	else
@@ -101,13 +109,30 @@ install_centos_ssr(){
 		rpm -ivh epel-release-6-8.noarch.rpm
 	fi
 	rm -rf *.rpm
-	yum -y update --exclude=kernel*
-	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables supervisor python-pip
+	yum -y update --exclude=kernel*	
 	yum -y groupinstall "Development Tools" 
-	# 再装一次pip
-	curl -O https://bootstrap.pypa.io/get-pip.py
-	python get-pip.py 
-	rm -rf *.py
+	#第一次yum安装 supervisor pip
+	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables supervisor python-pip
+	#第二次pip supervisor是否安装成功
+	if [ -z "`pip`" ]; then
+    curl -O https://bootstrap.pypa.io/get-pip.py
+		python get-pip.py 
+		rm -rf *.py
+	fi
+	if [ -z "`supervisorctl`" ]; then
+    pip install supervisor
+	fi
+	#第三次检测pip supervisor是否安装成功
+	if [ -z "`pip`" ]; then
+		if [ -z "`easy_install`"]; then
+    wget http://peak.telecommunity.com/dist/ez_setup.py
+		python ez_setup.py
+		fi		
+		easy_install pip
+	fi
+	if [ -z "`supervisorctl`" ]; then
+    easy_install supervisor
+	fi
 	pip install --upgrade pip
 	Libtest
 	wget --no-check-certificate $libAddr
@@ -117,11 +142,32 @@ install_centos_ssr(){
 	ldconfig
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
 	cd /root/shadowsocks
-	pip install supervisor #再安装一次好了。。。。我也是无奈了。。。
 	chkconfig supervisord on
+	#第一次安装
 	python_test
-	pip install -r requirements.txt #再装一遍
-	pip install -r requirements.txt -i $pyAddr
+	pip install -r requirements.txt -i $pyAddr	
+	#第二次检测是否安装成功
+	source_test
+	if [ -z "$answer" ]; then
+		pip install -r requirements.txt #再装一遍
+	fi
+	#第三次检测是否成功
+	source_test
+	if [ -z "$answer" ]; then
+		mkdir python && cd python
+		git clone https://github.com/shazow/urllib3.git && cd urllib3
+		python setup.py install && cd ..
+		git clone https://github.com/nakagami/CyMySQL.git && cd CyMySQL
+		python setup.py install && cd ..
+		git clone https://github.com/requests/requests.git && cd requests
+		python setup.py install && cd ..
+		git clone https://github.com/pyca/pyopenssl.git && cd pyopenssl
+		python setup.py install && cd ..
+		git clone https://github.com/cedadev/ndg_httpsclient.git && cd ndg_httpsclient
+		python setup.py install && cd ..
+		git clone https://github.com/etingof/pyasn1.git && cd pyasn1
+		python setup.py install && cd ..
+	fi	
 	systemctl stop firewalld.service
 	systemctl disable firewalld.service
 	cp apiconfig.py userapiconfig.py
