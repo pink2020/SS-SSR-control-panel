@@ -84,9 +84,9 @@ python_test(){
 	elif [ "$pyAddr" == "$pypi" ]; then
 		pyAddr='https://mirror-ord.pypi.io/simple'
 	elif [ "$pyAddr" == "$doubanio" ]; then
-		pyAddr='http://pypi.doubanio.com/simple'
+		pyAddr='http://pypi.doubanio.com/simple --trusted-host pypi.doubanio.com'
 	elif [ "$pyAddr" == "$pubyun_PING" ]; then
-		pyAddr='http://pypi.pubyun.com/simple'
+		pyAddr='http://pypi.pubyun.com/simple --trusted-host pypi.pubyun.com'
 	fi
 	rm -f ping.pl
 }
