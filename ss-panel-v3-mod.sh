@@ -255,8 +255,8 @@ install_node(){
 	sed -i "2a\NODE_ID = ${UserNODE_ID}" /root/shadowsocks/userapiconfig.py
 	# 启用supervisord
 	supervisorctl shutdown
-	echo_supervisord_conf > /etc/supervisord.conf
-  sed -i '$a [program:ssr]\ncommand = python /root/shadowsocks/server.py\nuser = root\nautostart = true\nautorestart = true' /etc/supervisord.conf
+	#某些机器没有echo_supervisord_conf 
+	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/supervisord.conf
 	supervisord
 	#iptables
 	iptables -F
