@@ -90,14 +90,6 @@ python_test(){
 	fi
 	rm -f ping.pl
 }
-source_test()
-{
-    if [ -s /usr/bin/python3 ]; then
-        answer=`/usr/bin/python3 -c 'import requests;print(requests)'`
-    elif [ -s /usr/bin/python2 ]; then
-        answer=`/usr/bin/python2 -c 'import requests;print(requests)'`
-    fi
-}
 install_centos_ssr(){
 	cd /root
 	Get_Dist_Version
@@ -151,13 +143,11 @@ install_centos_ssr(){
 	python_test
 	pip install -r requirements.txt -i $pyAddr	
 	#第二次检测是否安装成功
-	source_test
-	if [ -z "$answer" ]; then
+	if [ -z "`python -c 'import requests;print(requests)'`" ]; then
 		pip install -r requirements.txt #用自带的源试试再装一遍
 	fi
 	#第三次检测是否成功
-	source_test
-	if [ -z "$answer" ]; then
+	if [ -z "`python -c 'import requests;print(requests)'`" ]; then
 		mkdir python && cd python
 		git clone https://github.com/shazow/urllib3.git && cd urllib3
 		python setup.py install && cd ..
@@ -269,7 +259,7 @@ install_node(){
 	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
 	chmod +x /etc/rc.d/rc.local
 	echo "#############################################################"
-	echo "# 安装完成，节点即将重启使配置生效                               #"
+	echo "# 安装完成，节点即将重启使配置生效                          #"
 	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
 	echo "# Author: 91vps                                             #"
 	echo "#############################################################"
