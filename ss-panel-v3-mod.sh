@@ -70,13 +70,13 @@ python_test(){
 	pypi='mirror-ord.pypi.io'
 	doubanio='pypi.doubanio.com'
 	pubyun='pypi.pubyun.com'	
-	tsinghua_PING=`ping -c 1 -w 1 $tsinghua|grep time=|awk '{print $7}'|sed "s/time=//"`
-	pypi_PING=`ping -c 1 -w 1 $pypi|grep time=|awk '{print $7}'|sed "s/time=//"`
-	doubanio_PING=`ping -c 1 -w 1 $doubanio|grep time=|awk '{print $7}'|sed "s/time=//"`
-	pubyun_PING=`ping -c 1 -w 1 $pubyun|grep time=|awk '{print $7}'|sed "s/time=//"`
+	tsinghua_PING=`ping -c 1 -w 1 $tsinghua|grep time=|awk '{print $8}'|sed "s/time=//"`
+	pypi_PING=`ping -c 1 -w 1 $pypi|grep time=|awk '{print $8}'|sed "s/time=//"`
+	doubanio_PING=`ping -c 1 -w 1 $doubanio|grep time=|awk '{print $8}'|sed "s/time=//"`
+	pubyun_PING=`ping -c 1 -w 1 $pubyun|grep time=|awk '{print $8}'|sed "s/time=//"`
 	echo "$tsinghua_PING $tsinghua" > ping.pl
 	echo "$pypi_PING $pypi" >> ping.pl
-	echo "$doubanio_PING $doubanio" > ping.pl
+	echo "$doubanio_PING $doubanio" >> ping.pl
 	echo "$pubyun_PING $pubyun" >> ping.pl
 	pyAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
 	if [ "$pyAddr" == "$tsinghua" ]; then
