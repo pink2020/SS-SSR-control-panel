@@ -22,7 +22,7 @@ install_ss_panel_mod_v3(){
 	chattr +i public/.user.ini
 	wget -N -P  /usr/local/nginx/conf/ --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/nginx.conf
 	service nginx restart
-	IPAddress=`wget http://members.3322.org/dyndns/getip -O - -q ; echo`;
+	IPAddress=`wget http://whatismyip.akamai.com/ -O - -q ; echo`;
 	sed -i "s#103.74.192.11#${IPAddress}#" /home/wwwroot/default/sql/sspanel.sql
 	mysql -uroot -proot -e"create database sspanel;" 
 	mysql -uroot -proot -e"use sspanel;" 
@@ -232,11 +232,10 @@ install_node(){
 	read -p "Please input your muKey(like:mupass): " Usermukey
 	read -p "Please input your Node_ID(like:1): " UserNODE_ID
 	install_ssr_for_each
-	IPAddress=`wget http://members.3322.org/dyndns/getip -O - -q ; echo`;
 	cd /root/shadowsocks
 	echo -e "modify Config.py...\n"
 	sed -i "s#'zhaoj.in'#'jd.hk'#" /root/shadowsocks/userapiconfig.py
-	Userdomain=${Userdomain:-"http://${IPAddress}"}
+	Userdomain=${Userdomain:-"http://127.0.0.1"}
 	sed -i "s#https://zhaoj.in#${Userdomain}#" /root/shadowsocks/userapiconfig.py
 	Usermukey=${Usermukey:-"mupass"}
 	sed -i "s#glzjin#${Usermukey}#" /root/shadowsocks/userapiconfig.py
