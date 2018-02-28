@@ -38,5 +38,3 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel
 **切勿用于商业用途，可能会触犯法律**
 
 作者接定制功能、页面、脚本、游戏加速器，活儿保证让你满意~
-
-![](http://cdn.mmmxcc.cn/59ae59a7e12bf.jpg)
