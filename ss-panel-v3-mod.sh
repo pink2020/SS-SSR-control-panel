@@ -4,6 +4,7 @@
 install_ss_panel_mod_v3(){
 	yum -y remove httpd
 	yum install -y unzip zip git
+	yum update -y nss curl libcurl 
 	num=$1
 	if [ "${num}" != "1" ]; then
   	  wget -c --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/lnmp1.4.zip && unzip lnmp1.4.zip && rm -rf lnmp1.4.zip && cd lnmp1.4 && chmod +x install.sh && ./install.sh lnmp
@@ -264,6 +265,88 @@ install_node(){
 	echo "#############################################################"
 	reboot now
 }
+install_node_db(){
+	clear
+	echo
+	echo "#############################################################"
+	echo "# One click Install Shadowsocks-Python-Manyuser             #"
+	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
+	echo "# Author: 91vps                                             #"
+	echo "#############################################################"
+	echo
+	#Check Root
+	[ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
+	#check OS version
+	check_sys(){
+		if [[ -f /etc/redhat-release ]]; then
+			release="centos"
+		elif cat /etc/issue | grep -q -E -i "debian"; then
+			release="debian"
+		elif cat /etc/issue | grep -q -E -i "ubuntu"; then
+			release="ubuntu"
+		elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat"; then
+			release="centos"
+		elif cat /proc/version | grep -q -E -i "debian"; then
+			release="debian"
+		elif cat /proc/version | grep -q -E -i "ubuntu"; then
+			release="ubuntu"
+		elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
+			release="centos"
+	  fi
+	}
+	install_ssr_for_each(){
+		check_sys
+		if [[ ${release} = "centos" ]]; then
+			install_centos_ssr
+		else
+			install_ubuntu_ssr
+		fi
+	}
+	# 取消文件数量限制
+	sed -i '$a * hard nofile 512000\n* soft nofile 512000' /etc/security/limits.conf
+	read -p "Please input your MYSQL_HOST: " MYSQL_HOST
+	read -p "Please input your MYSQL_DB: " MYSQL_DB 
+	read -p "Please input your MYSQL_USER: " MYSQL_USER 
+	read -p "Please input your MYSQL_PASS: " MYSQL_PASS 
+	read -p "Please input your Node_ID(like:1): " UserNODE_ID
+	install_ssr_for_each
+	cd /root/shadowsocks
+	echo -e "modify Config.py...\n"
+	sed -i "s#'modwebapi'#'glzjinmod'#" /root/shadowsocks/userapiconfig.py #改成数据库对接
+	sed -i "s#'zhaoj.in'#'jd.hk'#" /root/shadowsocks/userapiconfig.py #混淆设置
+	MYSQL_HOST=${MYSQL_HOST:-"http://127.0.0.1"}
+	sed -i "s#MYSQL_HOST = '127.0.0.1'#MYSQL_HOST = '${MYSQL_HOST}'#" /root/shadowsocks/userapiconfig.py
+	MYSQL_DB=${MYSQL_DB:-"root"}
+	sed -i "s#MYSQL_DB = 'shadowsocks'#MYSQL_DB = '${MYSQL_DB}'#" /root/shadowsocks/userapiconfig.py
+	MYSQL_USER=${MYSQL_USER:-"root"}
+	sed -i "s#MYSQL_USER = 'ss'#MYSQL_USER = '${MYSQL_USER}'#" /root/shadowsocks/userapiconfig.py
+	MYSQL_PASS=${MYSQL_PASS:-"root"}
+	sed -i "s#MYSQL_PASS = 'ss'#MYSQL_PASS = '${MYSQL_PASS}'#" /root/shadowsocks/userapiconfig.py
+	UserNODE_ID=${UserNODE_ID:-"3"}
+	sed -i '2d' /root/shadowsocks/userapiconfig.py
+	sed -i "2a\NODE_ID = ${UserNODE_ID}" /root/shadowsocks/userapiconfig.py
+	# 启用supervisord
+	supervisorctl shutdown
+	#某些机器没有echo_supervisord_conf 
+	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/supervisord.conf
+	supervisord
+	#iptables
+	iptables -F
+	iptables -X  
+	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
+	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
+	iptables-save >/etc/sysconfig/iptables
+	iptables-save >/etc/sysconfig/iptables
+	echo 'iptables-restore /etc/sysconfig/iptables' >> /etc/rc.local
+	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
+	chmod +x /etc/rc.d/rc.local
+	echo "#############################################################"
+	echo "# 安装完成，节点即将重启使配置生效                          #"
+	echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
+	echo "# Author: 91vps                                             #"
+	echo "#############################################################"
+	reboot now
+}
 install_panel_and_node(){
 	install_ss_panel_mod_v3 $1
 	# 取消文件数量限制
@@ -303,20 +386,24 @@ echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
 echo "# Author: 91vps                                             #"
 echo "# Please choose the server you want                         #"
 echo "# 1  SS-V3_mod_panel and node One click Install             #"
-echo "# 2  SS-node One click Install                              #"
+echo "# 2  SS-node modwebapi One click Install                    #"
+#echo "# 3  SS-node Database  One click Install                    #"
 echo "#############################################################"
 echo
 num=$1
 if [ "${num}" == "1" ]; then
     install_panel_and_node 1
 else
-    stty erase '^H' && read -p " 请输入数字 [1-2]:" num
+    stty erase '^H' && read -p " 请输入数字 [1-3]:" num
 		case "$num" in
 		1)
 		install_panel_and_node
 		;;
 		2)
 		install_node
+		;;
+		3)
+		install_node_db
 		;;
 		*)
 		echo "请输入正确数字 [1-2]"
