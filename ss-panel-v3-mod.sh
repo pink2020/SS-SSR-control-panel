@@ -388,7 +388,7 @@ echo "# Author: 91vps                                             #"
 echo "# Please choose the server you want                         #"
 echo "# 1  SS-V3_mod_panel and node One click Install             #"
 echo "# 2  SS-node modwebapi One click Install                    #"
-#echo "# 3  SS-node Database  One click Install                    #"
+echo "# 3  SS-node Database  One click Install                    #"
 echo "#############################################################"
 echo
 num=$1
@@ -407,7 +407,7 @@ else
 		install_node_db
 		;;
 		*)
-		echo "请输入正确数字 [1-2]"
+		echo "请输入正确数字 [1-3]"
 		;;
 	esac
 fi
