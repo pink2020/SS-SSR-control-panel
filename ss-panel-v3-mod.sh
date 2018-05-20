@@ -104,6 +104,7 @@ install_centos_ssr(){
 	rm -rf *.rpm
 	yum -y update --exclude=kernel*	
 	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables
+	yum -y update nss curl libcurl 
 	yum -y groupinstall "Development Tools" 
 	#第一次yum安装 supervisor pip
 	yum -y install supervisor python-pip
