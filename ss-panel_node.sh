@@ -45,7 +45,7 @@ install_ss_panel(){
 	mysql -uroot -proot -e"create database ss;" 
 	mysql -uroot -proot -e"use ss;" 
 	mysql -uroot -proot ss < /home/wwwroot/default/db.sql
-	wget -N -P  /usr/local/nginx/conf/ http://home.ustc.edu.cn/~mmmwhy/nginx.conf 
+	wget -N -P  /usr/local/nginx/conf/ --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/nginx.conf
 	lnmp nginx restart
 }
 
