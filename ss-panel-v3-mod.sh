@@ -167,6 +167,7 @@ install_centos_ssr(){
 	fi	
 	systemctl stop firewalld.service
 	systemctl disable firewalld.service
+	cd /root/shadowsocks
 	cp apiconfig.py userapiconfig.py
 	cp config.json user-config.json
 }
